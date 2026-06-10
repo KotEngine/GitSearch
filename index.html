@@ -1607,6 +1607,9 @@
                         favorites = data;
                         localStorage.setItem('github_favorites', JSON.stringify(favorites));
                         showNotification('Избранное успешно восстановлено!');
+                        if (currentTab === 'favorites') {
+                            renderFavoritesPage();
+                        }
                     } else {
                         throw new Error();
                     }
@@ -1843,13 +1846,20 @@
             resultsContainer.appendChild(card);
         }
 
-        function applyTheme(theme) {
-            document.body.className = '';
-            document.body.classList.add(`theme-${theme}`);
-            if (animationsEnabled) {
-                document.body.classList.add('animations-enabled');
+        profileAvatar.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!profileContainer.contains(e.target)) {
+                profileDropdown.classList.remove('open');
             }
-        }
+        });
+
+        logoutButton.addEventListener('click', () => {
+            logout();
+        });
 
         async function fetchUserProfile(token) {
             try {
